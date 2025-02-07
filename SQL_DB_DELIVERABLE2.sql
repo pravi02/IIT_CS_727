@@ -62,20 +62,23 @@ DROP TEMPORARY TABLE temp_inventory;
 --
 -- Create a function to calculate total sales for a given order_id
 --
-
-CREATE FUNCTION get_total_sales_for_order(order_id INT)
-RETURNS DECIMAL(10, 2) DETERMINISTIC
+DELIMITER //
+CREATE FUNCTION get_total_sales(@order_id INT)
+RETURNS DECIMAL(10, 2)
+AS
 BEGIN
     DECLARE total_sales DECIMAL(10, 2);
-
-    -- Calculate the total sales for the given order_id
-    SELECT SUM(op.sales_amount) INTO total_sales
-    FROM order_process op
-    WHERE op.customer_order_id = order_id;
-
-    -- Return the calculated total sales amount
-    RETURN total_sales;
-END;
+    
+    -- Calculate the total sales for the order by multiplying quantity with product price
+    SELECT @total_sales = SUM(customer_order_item.request_quantity * product.price_per_unit)
+    FROM customer_order_item
+    JOIN product ON customer_order_item.product_id = product.product_id
+    WHERE customer_order_item.customer_order_id = @order_id;
+    
+    -- Return the total sales price
+    RETURN @total_sales;
+END//
+DELIMITER ;
 
 -- Example usage of the function
 SELECT get_total_sales(1) AS total_sales;
