@@ -1,0 +1,52 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% if title %}
+          <title>{% block title %}{% endblock %}</title>
+        {% else %}
+          <title>Home</title>
+        {% endif %}
+
+<!--{#        <link rel="icon" href="{% static '/app/favicon.png' %}" type="image/x-icon">#}-->
+
+        {% include 'sections/global_stylesheet.html' %}
+        <!-- page specific styles -->
+        {% block stylesheets %}{% endblock stylesheets %}
+    </head>
+    <body class="layout-fixed sidebar-expand-lg bg-body-tertiary {% block body_class %}{% endblock body_class %} dark-mode"> <!--begin::App Wrapper-->
+        <div class="app-wrapper"> <!--begin::Header-->
+
+            {% include 'sections/main_navigations.html' %}
+
+            {% include 'sections/sidebar.html' %}
+            <main class="app-main">
+                {% include 'contents/content_header.html' %}
+                <div class="app-content"> <!--begin::Container-->
+                    <div class="container-fluid"> <!--begin::Row-->
+
+                        {% if messages %}
+                          {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+
+                        {% block content %}{% endblock content %}
+                    </div> <!--end::Container-->
+                </div> <!--end::App Content-->
+            </main> <!--end::App Main-->
+
+            {% include 'sections/footer.html' %}
+
+        </div> <!--end::App Wrapper-->
+        {% include 'sections/global_javascript.html' %}
+        <!-- page specific javascript -->
+        {% block javascripts %}{% endblock javascripts %}
+    </body>
+</html>

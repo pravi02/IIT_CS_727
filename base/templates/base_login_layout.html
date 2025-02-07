@@ -1,0 +1,36 @@
+{% load static %}
+<!doctype html>
+
+<html lang="en">
+  <head>
+    {% block head %}
+        {% block meta %}
+            <!-- Required meta tags -->
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="icon" href="{% static '/app/favicon.png' %}" type="image/x-icon">
+        {% endblock meta %}
+
+        {% block stylesheets %}{% endblock stylesheets %}
+        {% if title %}
+          <title>BT-CO - {% block title %}{% endblock %} | WebApps</title>
+        {% else %}
+          <title>BT-CO - Home | WebApps</title>
+        {% endif %}
+
+         {% include 'sections/sections/global_stylesheet.html' %}
+
+    {% endblock head %}
+  </head>
+
+  <body class="hold-transition login-page">
+    {% block body %}
+
+      {% block content %}{% endblock content %}
+
+      {% include 'sections/sections/global_javascript.html' %}
+      {% block javascripts %}{% endblock javascripts%}
+
+    {% endblock body %}
+  </body>
+</html>

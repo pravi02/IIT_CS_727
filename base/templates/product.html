@@ -1,0 +1,256 @@
+{% extends 'base_layout.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#productModel">New Product</button></h3>
+            <div class="card-tools">
+              <ul class="pagination pagination-sm float-end">
+                <li class="page-item"><a class="page-link" href="#">«</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">»</a></li>
+              </ul>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body p-0">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>SL No</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Supplier</th>
+                  <th>Weight in (KG)</th>
+                  <th style="">Unit Price</th>
+                  <th style="width: 110px"></th>
+                </tr>
+              </thead>
+              <tbody>
+               {% for prod in products %}
+                <tr class="align-middle">
+                  <td>{{ prod.product_id }}</td>
+                    <td>{{ prod.serial_no }}</td>
+                  <td>{{ prod.product_name }}</td>
+                  <td>{{ prod.product_category }}</td>
+                  <td>{{ prod.product_supplier }}</td>
+                  <td>{{ prod.product_weight }}</td>
+                  <td>{{ prod.price_per_unit }}</td>
+
+                  <td>
+                    <ul class="list-inline m-0">
+                        <li class="list-inline-item">
+                            <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" href="{% url 'product-delete' prod.pk %}" data-original-title="Delete"><i class="bi bi-trash3"></i></a>
+                        </li>
+                    </ul>
+                  </td>
+                </tr>
+
+                {% empty %}
+                <tr class="align-middle">
+                    <td><span>No objects yet.</span></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-product-group-tab" data-bs-toggle="tab" data-bs-target="#nav-product-group" type="button" role="tab" aria-controls="nav-product-group" aria-selected="true">Product Category</button>
+            <button class="nav-link" id="nav-supplier-tab" data-bs-toggle="tab" data-bs-target="#nav-supplier" type="button" role="tab" aria-controls="nav-supplier" aria-selected="false">Supplier</button>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-product-group" role="tabpanel" aria-labelledby="nav-product-group-tab" tabindex="0">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#productGroupModel">New Product Category</button></h3>
+                <div class="card-tools">
+                  <ul class="pagination pagination-sm float-end">
+                    <li class="page-item"><a class="page-link" href="#">«</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">»</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Name</th>
+                      <th style="width: 110px"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                   {% for cat in categories %}
+                    <tr class="align-middle">
+                      <td>{{ cat.category_id }}</td>
+                      <td>{{ cat.category_name }}</td>
+
+                      <td>
+                        <ul class="list-inline m-0">
+                            <li class="list-inline-item">
+                                <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
+                            </li>
+
+                            <li class="list-inline-item">
+                                <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" href="{% url 'product-category-delete' cat.pk %}" data-original-title="Delete"><i class="bi bi-trash3"></i></a>
+                            </li>
+                        </ul>
+                      </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr class="align-middle">
+                        <td><span>No objects yet.</span></td>
+
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-supplier" role="tabpanel" aria-labelledby="nav-supplier-tab" tabindex="0">
+              <div class="card mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#supplierModel">New Supplier</button></h3>
+                    <div class="card-tools">
+                      <ul class="pagination pagination-sm float-end">
+                        <li class="page-item"><a class="page-link" href="#">«</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">»</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-body p-0">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th style="width: 10px">#</th>
+                          <th>Name</th>
+                          <th>Contact #</th>
+                          <th style="width: 110px"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                       {% for supplier in suppliers %}
+                        <tr class="align-middle">
+                          <td>{{ supplier.supplier_id }}</td>
+                          <td>{{ supplier.supplier_name }}</td>
+                          <td>{{ supplier.supplier_contact_number }}</td>
+                          <td>
+                            <ul class="list-inline m-0">
+                                <li class="list-inline-item">
+                                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" href="{% url 'supplier-delete' supplier.pk %}" data-original-title="Delete"><i class="bi bi-trash3"></i></a>
+                                </li>
+                            </ul>
+                          </td>
+                        </tr>
+
+                        {% empty %}
+                        <tr class="align-middle">
+                            <td><span>No objects yet.</span></td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="modal fade" id="productModel" tabindex="-1" aria-labelledby="productModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModelLabel">Register New Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {{ form1|crispy }}
+<!--            <button type="submit">Submit</button>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="form1" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="productGroupModel" tabindex="-1" aria-labelledby="productGroupModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="productGroupModelLabel">Register New Product Group</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {{ form2|crispy }}
+<!--            <button type="submit">Submit</button>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="form2" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="supplierModel" tabindex="-1" aria-labelledby="supplierModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="supplierModelLabel">Register New Supplier</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {{ form3|crispy }}
+<!--            <button type="submit">Submit</button>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="form3" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

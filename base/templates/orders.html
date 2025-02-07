@@ -1,0 +1,89 @@
+{% extends 'base_layout.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+                <div class="card mb-4">
+                  <div class="card-header">
+                    <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#orderModel">New Order</button></h3>
+                    <div class="card-tools">
+                      <ul class="pagination pagination-sm float-end">
+                        <li class="page-item"><a class="page-link" href="#">«</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">»</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body p-0">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th style="width: 10px">#</th>
+                          <th>Customer</th>
+                          <th>Order Date</th>
+                          <th>Total Qty</th>
+                          <th style="">Telephone</th>
+                          <th style="width: 100px"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                       {% for ord in object_list %}
+                        <tr class="align-middle">
+                          <td>{{ ord.order_id }}</td>
+                          <td>{{ ord.customer.customer_name }}</td>
+                          <td>{{ ord.order_date }}</td>
+                          <td>{{ ord.customerorderitems_set.total_qty }}</td>
+                          <td>
+                            <ul class="list-inline m-0">
+                                <li class="list-inline-item">
+                                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="bi bi-trash3"></i></button>
+                                </li>
+                            </ul>
+                        </td>
+<!--                          <td>{{ ord.customer_telephone }}</td>-->
+                        </tr>
+
+                        {% empty %}
+                        <tr class="align-middle">
+                            <td><span>No objects yet.</span></td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+
+<div class="modal fade" id="orderModel" tabindex="-1" aria-labelledby="orderModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderModelLabel">Create New Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {{ form1|crispy  }}
+        <hr>
+            {{ form2|crispy }}
+<!--            <button type="submit">Submit</button>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

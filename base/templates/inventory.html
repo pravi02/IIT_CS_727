@@ -1,0 +1,167 @@
+{% extends 'base_layout.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+<div class="section">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#inventoryModel">New Inventory</button></h3>
+          <div class="card-tools">
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item"><a class="page-link" href="#">«</a></li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">»</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 10px">#</th>
+                <th>Product</th>
+                <th>Available qty</th>
+                <th>Location</th>
+                <th style="">Status</th>
+                <th style="width: 110px"></th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for inv in inventory %}
+              <tr class="align-middle">
+                <td>{{ inv.inventory_id }}</td>
+                <td>{{ inv.product }}</td>
+                <td>{{ inv.available_quantity }}</td>
+                <td>{{ inv.inventory_location }}</td>
+                <td>{{ inv.inventory_status }}</td>
+                <td>
+                    <ul class="list-inline m-0">
+                        <li class="list-inline-item">
+                            <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'inventory-delete' inv.pk %}" data-placement="top" title="" data-original-title="Delete"><i class="bi bi-trash3"></i></a>
+                        </li>
+                    </ul>
+                </td>
+              </tr>
+
+              {% empty %}
+              <tr class="align-middle">
+                  <td><span>No objects yet.</span></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#locationModel">New Location</button></h3>
+          <div class="card-tools">
+            <ul class="pagination pagination-sm float-end">
+              <li class="page-item"><a class="page-link" href="#">«</a></li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">»</a></li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="card-body p-0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 10px">#</th>
+                <th>Aisle Number</th>
+                <th>Bin Location</th>
+                <th style="width: 110px"></th>
+              </tr>
+            </thead>
+            <tbody>
+             {% for loc in location %}
+              <tr class="align-middle">
+                <td>{{ loc.location_id }}</td>
+                <td>{{ loc.aisle_number }}</td>
+                <td>{{ loc.bin_location }}</td>
+                <td>
+                    <ul class="list-inline m-0">
+                        <li class="list-inline-item">
+                            <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'inventory-location-delete' loc.pk %}" data-placement="top" title="" data-original-title="Delete"><i class="bi bi-trash3"></i></a>
+                        </li>
+                    </ul>
+                </td>
+              </tr>
+
+              {% empty %}
+              <tr class="align-middle">
+                  <td><span>No objects yet.</span></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="inventoryModel" tabindex="-1" aria-labelledby="inventoryModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="inventoryModelLabel">Create New Inventory</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {{ form1|crispy }}
+<!--            <button type="submit">Submit</button>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="form1" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="locationModel" tabindex="-1" aria-labelledby="locationModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form method="post">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="locationModelLabel">Create New Location</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            {{ form2|crispy }}
+<!--            <button type="submit">Submit</button>-->
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" name="form2" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
