@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Black">
-    <option name="sdkName" value="webenv" />
+    <option name="sdkName" value="iit" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="webenv" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="iit" project-jdk-type="Python SDK" />
 </project>

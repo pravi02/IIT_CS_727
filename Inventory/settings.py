@@ -50,7 +50,6 @@ CUSTOM_APPS = [
     "crispy_bootstrap5",
     'django_filters',
     'django_extensions',
-    'djangoviz',
     # 'django.contrib.humanize',
     'base.apps.BaseConfig',
     # 'cs_app.apps.CsAppConfig',
@@ -108,16 +107,18 @@ WSGI_APPLICATION = 'Inventory.wsgi.application'
 
 DATABASES = {
         'default': {
-            'ENGINE': 'mssql',
+            # 'ENGINE': 'mssql',
+            'ENGINE': 'django.db.backends.mysql',
             'NAME': os.getenv("DEFAULT_DATABASE"),
             'USER': os.getenv("DEFAULT_DB_USERNAME"),
             'PASSWORD': os.getenv("DEFAULT_DB_PASSWORD"),
             'HOST': os.getenv("DEFAULT_DB_HOST"),
-            'PORT': '',
+            'PORT': os.getenv("DEFAULT_DB_PORT", ''),
+            # 'PORT': '',
 
-            'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
-            },
+            # 'OPTIONS': {
+            #     'driver': 'ODBC Driver 17 for SQL Server',
+            # },
         },
     }
 

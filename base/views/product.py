@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, FormView, TemplateView
 
@@ -30,9 +31,22 @@ class ProductListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['products'] = Product.objects.all().order_by('pk')
-        context['categories'] = ProductCategory.objects.all().order_by('pk')
-        context['suppliers'] = Supplier.objects.all().order_by('pk')
+
+        products = Product.objects.all().order_by('pk')
+        paginator_products = Paginator(products, 10)
+        product_page_number = self.request.GET.get('product_page')
+        context['products'] = paginator_products.get_page(product_page_number)
+
+        product_category = ProductCategory.objects.all().order_by('pk')
+        paginator_category = Paginator(product_category, 10)
+        product_category_page_number = self.request.GET.get('categories_page')
+        context['categories'] = paginator_category.get_page(product_category_page_number)
+
+        suppliers = Supplier.objects.all().order_by('pk')
+        paginator_supplier = Paginator(suppliers, 10)
+        suppliers_page_number = self.request.GET.get('suppliers_page')
+        context['suppliers'] = paginator_supplier.get_page(suppliers_page_number)
+
         context['form1'] = ProductForm()
         context['form2'] = ProductCategoryForm()
         context['form3'] = SupplierForm()

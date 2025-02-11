@@ -7,11 +7,13 @@
                     <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#customerModel">New Customer</button></h3>
                     <div class="card-tools">
                       <ul class="pagination pagination-sm float-end">
-                        <li class="page-item"><a class="page-link" href="#">«</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">»</a></li>
+                        {% if customers.has_previous %}
+                          <li class="page-item"><a class="page-link px-2" href="?page={{ customers.previous_page_number }}"><</a></li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link disable"> Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a></li>
+                          {% if object_list.has_next %}
+                            <li class="page-item"><a class="page-link px-2" href="?page={{ customers.next_page_number }}">»</a></li>
+                          {% endif %}
                       </ul>
                     </div>
                   </div>
@@ -29,7 +31,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                       {% for cust in object_list %}
+                       {% for cust in customers %}
                         <tr class="align-middle">
                           <td>{{ cust.customer_id }}</td>
                           <td>{{ cust.customer_name }}</td>

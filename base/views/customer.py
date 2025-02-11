@@ -7,8 +7,9 @@ from base.views.common_view import CustomDeleteView
 
 
 class CustomerListView(ListView):
-    paginate_by = 20
+    paginate_by = 10
     model = Customer
+    context_object_name = 'customers'
     template_name = "customer.html"
     def get_queryset(self):
         queryset = super().get_queryset()

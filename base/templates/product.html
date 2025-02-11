@@ -11,11 +11,16 @@
             <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#productModel">New Product</button></h3>
             <div class="card-tools">
               <ul class="pagination pagination-sm float-end">
-                <li class="page-item"><a class="page-link" href="#">«</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">»</a></li>
+
+                {% if products.has_previous %}
+                    <li class="page-item"><a class="page-link px-2" href="?product_page={{ products.previous_page_number }}"><</a></li>
+                {% endif %}
+                <li class="page-item"><a class="page-link disable"> Page {{ products.number }} of {{ products.paginator.num_pages }}</a></li>
+<!--                <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+                  {% if products.has_next %}
+                    <li class="page-item"><a class="page-link px-2" href="?product_page={{ products.next_page_number }}">»</a></li>
+                  {% endif %}
               </ul>
             </div>
           </div>
@@ -82,11 +87,13 @@
                 <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#productGroupModel">New Product Category</button></h3>
                 <div class="card-tools">
                   <ul class="pagination pagination-sm float-end">
-                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
+                    {% if categories.has_previous %}
+                      <li class="page-item"><a class="page-link px-2" href="?categories_page={{ categories.previous_page_number }}"><</a></li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link disable"> Page {{ categories.number }} of {{ categories.paginator.num_pages }}</a></li>
+                      {% if categories.has_next %}
+                        <li class="page-item"><a class="page-link px-2" href="?categories_page={{ categories.next_page_number }}">»</a></li>
+                      {% endif %}
                   </ul>
                 </div>
               </div>
@@ -135,11 +142,13 @@
                     <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#supplierModel">New Supplier</button></h3>
                     <div class="card-tools">
                       <ul class="pagination pagination-sm float-end">
-                        <li class="page-item"><a class="page-link" href="#">«</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">»</a></li>
+                        {% if suppliers.has_previous %}
+                          <li class="page-item"><a class="page-link px-2" href="?suppliers_page={{ suppliers.previous_page_number }}"><</a></li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link disable"> Page {{ suppliers.number }} of {{ suppliers.paginator.num_pages }}</a></li>
+                          {% if suppliers.has_next %}
+                            <li class="page-item"><a class="page-link px-2" href="?suppliers_page={{ suppliers.next_page_number }}">»</a></li>
+                          {% endif %}
                       </ul>
                     </div>
                   </div>
