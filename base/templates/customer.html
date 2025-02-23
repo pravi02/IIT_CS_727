@@ -1,88 +1,262 @@
+{#{% extends 'base_layout.html' %}#}
+{##}
+{#{% block content %}#}
+{##}
+{#  <div class="card mb-4">#}
+{#    <div class="card-header">#}
+{#      <h3 class="card-title">#}
+{#        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#customerModel">New Customer</button>#}
+{#      </h3>#}
+{#      <div class="card-tools">#}
+{#        <ul class="pagination pagination-sm float-end">#}
+{#          {% if customers.has_previous %}#}
+{#            <li class="page-item">#}
+{#              <a class="page-link px-2" href="?page={{ customers.previous_page_number }}">«</a>#}
+{#            </li>#}
+{#          {% endif %}#}
+{#          <li class="page-item">#}
+{#            <a class="page-link disable"> Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a>#}
+{#          </li>#}
+{#          {% if customers.has_next %}#}
+{#            <li class="page-item">#}
+{#              <a class="page-link px-2" href="?page={{ customers.next_page_number }}">»</a>#}
+{#            </li>#}
+{#          {% endif %}#}
+{#        </ul>#}
+{#      </div>#}
+{#    </div>#}
+{#    <!-- /.card-header -->#}
+{#    <div class="card-body p-0">#}
+{#      <table class="table">#}
+{#        <thead>#}
+{#          <tr>#}
+{#            <th style="width: 10px">#</th>#}
+{#            <th>Name</th>#}
+{#            <th>Location</th>#}
+{#            <th>Email</th>#}
+{#            <th style="">Telephone</th>#}
+{#            <th style="width: 110px"></th>#}
+{#          </tr>#}
+{#        </thead>#}
+{#        <tbody>#}
+{#          {% for cust in customers %}#}
+{#            <tr class="align-middle">#}
+{#              <td>{{ cust.customer_id }}</td>#}
+{#              <td>{{ cust.customer_name }}</td>#}
+{#              <td>{{ cust.customer_location }}</td>#}
+{#              <td>{{ cust.customer_email }}</td>#}
+{#              <td>{{ cust.customer_telephone }}</td>#}
+{#              <td>#}
+{#                <ul class="list-inline m-0">#}
+{#                  <li class="list-inline-item">#}
+{#                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add">#}
+{#                      <i class="bi bi-pencil-square"></i>#}
+{#                    </button>#}
+{#                  </li>#}
+{#                  <li class="list-inline-item">#}
+{#                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'customer-delete' cust.pk %}" data-placement="top" title="" data-original-title="Delete">#}
+{#                      <i class="bi bi-trash3"></i>#}
+{#                    </a>#}
+{#                  </li>#}
+{#                </ul>#}
+{#              </td>#}
+{#            </tr>#}
+{#          {% empty %}#}
+{#            <tr class="align-middle">#}
+{#              <td><span>No objects yet.</span></td>#}
+{#            </tr>#}
+{#          {% endfor %}#}
+{#        </tbody>#}
+{#      </table>#}
+{#    </div>#}
+{#    <!-- /.card-body -->#}
+{#  </div>#}
+{##}
+{#  <div class="modal fade" id="customerModel" tabindex="-1" aria-labelledby="customerModelLabel" aria-hidden="true">#}
+{#    <div class="modal-dialog">#}
+{#      <div class="modal-content">#}
+{#        <form method="post">#}
+{#          {% csrf_token %}#}
+{#          <div class="modal-header">#}
+{#            <h5 class="modal-title" id="customerModelLabel">Register New Customer</h5>#}
+{#            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
+{#          </div>#}
+{#          <div class="modal-body">#}
+{#            {{ form.as_p }}#}
+{#          </div>#}
+{#          <div class="modal-footer">#}
+{#            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>#}
+{#            <button type="submit" class="btn btn-primary">Save</button>#}
+{#          </div>#}
+{#        </form>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{##}
+{#{% endblock content %}#}
+
 {% extends 'base_layout.html' %}
 
 {% block content %}
 
-                <div class="card mb-4">
-                  <div class="card-header">
-                    <h3 class="card-title"><button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#customerModel">New Customer</button></h3>
-                    <div class="card-tools">
-                      <ul class="pagination pagination-sm float-end">
-                        {% if customers.has_previous %}
-                          <li class="page-item"><a class="page-link px-2" href="?page={{ customers.previous_page_number }}"><</a></li>
-                        {% endif %}
-                        <li class="page-item"><a class="page-link disable"> Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a></li>
-                          {% if object_list.has_next %}
-                            <li class="page-item"><a class="page-link px-2" href="?page={{ customers.next_page_number }}">»</a></li>
-                          {% endif %}
-                      </ul>
-                    </div>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body p-0">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th style="width: 10px">#</th>
-                          <th>Name</th>
-                          <th>Location</th>
-                          <th>Email</th>
-                          <th style="">Telephone</th>
-                          <th style="width: 110px"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                       {% for cust in customers %}
-                        <tr class="align-middle">
-                          <td>{{ cust.customer_id }}</td>
-                          <td>{{ cust.customer_name }}</td>
-                          <td>{{ cust.customer_location }}</td>
-                          <td>{{ cust.customer_email }}</td>
-                          <td>{{ cust.customer_telephone }}</td>
-                          <td>
-                            <ul class="list-inline m-0">
-                                <li class="list-inline-item">
-                                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add"><i class="bi bi-pencil-square"></i></button>
-                                </li>
-
-                                <li class="list-inline-item">
-                                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'customer-delete' cust.pk %}" data-placement="top" title="" data-original-title="Delete"><i class="bi bi-trash3"></i></a>
-                                </li>
-                            </ul>
-                          </td>
-                        </tr>
-
-                        {% empty %}
-                        <tr class="align-middle">
-                            <td><span>No objects yet.</span></td>
-                        </tr>
-                      {% endfor %}
-                      </tbody>
-                    </table>
-                  </div>
-                  <!-- /.card-body -->
-                </div>
-
-<div class="modal fade" id="customerModel" tabindex="-1" aria-labelledby="customerModelLabel" aria-hidden="true">
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-      <form method="post">
-      {% csrf_token %}
-      <div class="modal-header">
-        <h5 class="modal-title" id="customerModelLabel">Register New Customer</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3 class="card-title">
+        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#newCustomerModal">New Customer</button>
+      </h3>
+      <div class="card-tools">
+        <ul class="pagination pagination-sm float-end">
+          {% if customers.has_previous %}
+            <li class="page-item">
+              <a class="page-link px-2" href="?page={{ customers.previous_page_number }}">«</a>
+            </li>
+          {% endif %}
+          <li class="page-item">
+            <a class="page-link disable"> Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a>
+          </li>
+          {% if customers.has_next %}
+            <li class="page-item">
+              <a class="page-link px-2" href="?page={{ customers.next_page_number }}">»</a>
+            </li>
+          {% endif %}
+        </ul>
       </div>
-      <div class="modal-body">
-            {{ form.as_p }}
-<!--            <button type="submit">Submit</button>-->
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body p-0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Email</th>
+            <th style="">Telephone</th>
+            <th style="width: 110px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for cust in customers %}
+            <tr class="align-middle">
+              <td>{{ cust.customer_id }}</td>
+              <td>{{ cust.customer_name }}</td>
+              <td>{{ cust.customer_location }}</td>
+              <td>{{ cust.customer_email }}</td>
+              <td>{{ cust.customer_telephone }}</td>
+              <td>
+                <ul class="list-inline m-0">
+                  <li class="list-inline-item">
+                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#updateCustomerModal" data-customer-id="{{ cust.customer_id }}" data-customer-name="{{ cust.customer_name }}" data-customer-location="{{ cust.customer_location }}" data-customer-email="{{ cust.customer_email }}" data-customer-telephone="{{ cust.customer_telephone }}">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                  </li>
+                  <li class="list-inline-item">
+                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'customer-delete' cust.pk %}" data-placement="top" title="" data-original-title="Delete">
+                      <i class="bi bi-trash3"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          {% empty %}
+            <tr class="align-middle">
+              <td><span>No objects yet.</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+
+  <!-- Update Customer Modal -->
+  <div class="modal fade" id="updateCustomerModal" tabindex="-1" aria-labelledby="updateCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" id="updateCustomerForm">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateCustomerModalLabel">Update Customer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="updateCustomerId" name="customer_id">
+            <div class="mb-3">
+              <label for="updateCustomerName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="updateCustomerName" name="customer_name">
+            </div>
+            <div class="mb-3">
+              <label for="updateCustomerLocation" class="form-label">Location</label>
+              <input type="text" class="form-control" id="updateCustomerLocation" name="customer_location">
+            </div>
+            <div class="mb-3">
+              <label for="updateCustomerEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="updateCustomerEmail" name="customer_email">
+            </div>
+            <div class="mb-3">
+              <label for="updateCustomerTelephone" class="form-label">Telephone</label>
+              <input type="text" class="form-control" id="updateCustomerTelephone" name="customer_telephone">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-      </form>
     </div>
   </div>
-</div>
+  <div class="modal fade" id="newCustomerModal" tabindex="-1" aria-labelledby="newCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" id="newCustomerForm">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="newCustomerModalLabel">New Customer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="customerName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="customerName" name="customer_name" required>
+            </div>
+            <div class="mb-3">
+              <label for="customerLocation" class="form-label">Location</label>
+              <input type="text" class="form-control" id="customerLocation" name="customer_location" required>
+            </div>
+            <div class="mb-3">
+              <label for="customerEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="customerEmail" name="customer_email" required>
+            </div>
+            <div class="mb-3">
+              <label for="customerTelephone" class="form-label">Telephone</label>
+              <input type="text" class="form-control" id="customerTelephone" name="customer_telephone" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save Customer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 {% endblock content %}
+{% block javascripts %}
+    $('#updateCustomerModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); // Button that triggered the modal
+  var customerId = button.data('customer-id');
+  var customerName = button.data('customer-name');
+  var customerLocation = button.data('customer-location');
+  var customerEmail = button.data('customer-email');
+  var customerTelephone = button.data('customer-telephone');
+
+  // Update modal fields
+  $('#updateCustomerId').val(customerId);
+  $('#updateCustomerName').val(customerName);
+  $('#updateCustomerLocation').val(customerLocation);
+  $('#updateCustomerEmail').val(customerEmail);
+  $('#updateCustomerTelephone').val(customerTelephone);
+});
+{% endblock javascripts %}

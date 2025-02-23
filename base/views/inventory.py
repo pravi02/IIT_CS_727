@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
@@ -33,8 +34,19 @@ class InventoryView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['inventory'] = Inventory.objects.all().order_by('pk')
-        context['location'] = InventoryLocation.objects.all().order_by('pk')
+
+        inventory = Inventory.objects.all().order_by('pk')
+        paginator_inventory = Paginator(inventory, 10)
+        inventory_page_number = self.request.GET.get('inventory_page')
+        context['inventory'] = paginator_inventory.get_page(inventory_page_number)
+        # context['inventory'] = Inventory.objects.all().order_by('pk')
+
+        inventory_location = InventoryLocation.objects.all().order_by('pk')
+        paginator_inventory_location = Paginator(inventory_location, 10)
+        location_page_number = self.request.GET.get('location_page')
+        context['location'] = paginator_inventory_location.get_page(location_page_number)
+
+        # context['location'] = InventoryLocation.objects.all().order_by('pk')
         context['form1'] = InventoryForm()
         context['form2'] = InventoryLocationForm()
         return context

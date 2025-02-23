@@ -109,11 +109,11 @@ DATABASES = {
         'default': {
             # 'ENGINE': 'mssql',
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv("DEFAULT_DATABASE"),
-            'USER': os.getenv("DEFAULT_DB_USERNAME"),
-            'PASSWORD': os.getenv("DEFAULT_DB_PASSWORD"),
-            'HOST': os.getenv("DEFAULT_DB_HOST"),
-            'PORT': os.getenv("DEFAULT_DB_PORT", ''),
+            'NAME': os.getenv("DATABASE_NAME"),
+            'USER': os.getenv("DATABASE_USER"),
+            'PASSWORD': os.getenv("DATABASE_PASSWORD"),
+            'HOST': os.getenv("DATABASE_HOST"),
+            'PORT': os.getenv("DATABASE_PORT", ''),
             # 'PORT': '',
 
             # 'OPTIONS': {

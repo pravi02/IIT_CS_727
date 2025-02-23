@@ -26,7 +26,7 @@ class OrderProcess(models.Model):
 
 class ProcessedLineItems(models.Model):
     line_item_id = models.AutoField(primary_key=True)
-    customer_line_item= models.ForeignKey(CustomerOrderItems, on_delete=models.RESTRICT)
+    customer_line_item= models.ForeignKey(CustomerOrderItems, on_delete=models.RESTRICT, related_name='processed_items')
     process_id = models.ForeignKey(OrderProcess, on_delete=models.CASCADE)
     inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
     allocated_quantity = models.IntegerField()

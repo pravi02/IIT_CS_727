@@ -32,7 +32,7 @@ class CustomerOrder(models.Model):
 
 class CustomerOrderItems(models.Model):
     line_item_id = models.AutoField(primary_key=True)
-    customer_order = models.ForeignKey(CustomerOrder, on_delete=models.CASCADE)
+    customer_order = models.ForeignKey(CustomerOrder, on_delete=models.CASCADE, related_name='order_line_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     request_quantity = models.IntegerField()
 
