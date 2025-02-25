@@ -5,7 +5,7 @@ from base.models.customer import Customer, CustomerOrderItems
 from base.models.inventory import Inventory
 
 
-class OrderProcess(models.Model):
+class ProcessedOrder(models.Model):
     transaction_id = models.AutoField(primary_key=True)
     transaction_date = models.DateField()
     sales_amount = models.FloatField()
@@ -27,7 +27,7 @@ class OrderProcess(models.Model):
 class ProcessedLineItems(models.Model):
     line_item_id = models.AutoField(primary_key=True)
     customer_line_item= models.ForeignKey(CustomerOrderItems, on_delete=models.RESTRICT, related_name='processed_items')
-    process_id = models.ForeignKey(OrderProcess, on_delete=models.CASCADE)
+    process_id = models.ForeignKey(ProcessedOrder, on_delete=models.CASCADE)
     inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
     allocated_quantity = models.IntegerField()
 

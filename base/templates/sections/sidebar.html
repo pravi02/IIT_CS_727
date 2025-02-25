@@ -1,47 +1,104 @@
 {% load static %}
-<aside class="app-sidebar bg-body-secondary shadow " data-bs-theme="dark"> <!--begin::Sidebar Brand-->
-    <div class="sidebar-brand border-bottom-0"> <!--begin::Brand Link-->
-        <a href="{% url 'home' %}" class="brand-link">
+<aside class="app-sidebar bg-body-secondary shadow " data-bs-theme="dark">
+   <!--begin::Sidebar Brand-->
+   <div class="sidebar-brand border-bottom-0">
+      <!--begin::Brand Link-->
+      <a href="{% url 'home' %}" class="brand-link">
+         <!--begin::Brand Text--> <span class="brand-text fw-light">CS-727</span> <!--end::Brand Text-->
+      </a>
+      <!--end::Brand Link-->
+   </div>
+   <!--end::Sidebar Brand-->
+   <!--begin::Sidebar Wrapper-->
+   <div class="sidebar-wrapper">
+      <nav class="mt-2">
+         <!--begin::Sidebar Menu-->
+         <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+            <li class="nav-item menu-open">
+               <a href="#" class="nav-link active">
+                  <i class="nav-icon bi bi-speedometer"></i>
+                  <p>
+                     Orders Home
+                     <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+               </a>
+               <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                     <a href="{% url 'orders-home' %}" class="nav-link {% if 'open' in request.path %} active {% endif %} ">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Open Orders</p>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="{% url 'orders-home' %}" class="nav-link {% if 'closed' in request.path %} active {% endif %} ">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Closed Orders</p>
+                     </a>
+                  </li>
+               </ul>
+            <li class="nav-item menu-open">
+               <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill"></i>
+                  <p>
+                     Inventory Home
+                     <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+               </a>
+               <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                     <a href="{% url 'inventory-home' %}" class="nav-link {% if 'inventory' in request.path %} active {% endif %}">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Inventory</p>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="{% url 'inventory-location-home' %}" class="nav-link {% if 'location' in request.path %} active {% endif %}">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Inventory Location</p>
+                     </a>
+                  </li>
+               </ul>
+            </li>
+            <li class="nav-item">
+               <a href="{% url 'customer-home' %}" class="nav-link {% if 'customer' in request.path %} active {% endif %}">
+                  <i class="nav-icon bi bi-circle"></i>
+                  <p>Customer</p>
+               </a>
+            </li>
+            <li class="nav-item menu-open">
+               <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill"></i>
+                  <p>
+                     Product Home
+                     <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+               </a>
+               <ul class="nav nav-treeview" >
+                  <li class="nav-item">
+                     <a href="{% url 'product-home' %}" class="nav-link {% if 'product' in request.path %} active {% endif %} ">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Product</p>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="{% url 'product-category-home' %}" class="nav-link {% if 'product_category' in request.path %} active {% endif %} ">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Product Category</p>
+                     </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="{% url 'product-supplier-home' %}" class="nav-link {% if 'product_supplier' in request.path %} active {% endif %} ">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>Product Supplier</p>
+                     </a>
+                  </li>
+               </ul>
+            </li>
+         </ul>
 
-            <!--begin::Brand Text--> <span class="brand-text fw-light">CS-727</span> <!--end::Brand Text-->
-        </a> <!--end::Brand Link-->
-    </div> <!--end::Sidebar Brand-->
-    <!--begin::Sidebar Wrapper-->
-    <div class="sidebar-wrapper">
-        <nav class="mt-2"> <!--begin::Sidebar Menu-->
-            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-                <li class="nav-item menu-open"> <a href="#" class="nav-link active"> <i class="nav-icon bi bi-speedometer"></i>
-                        <p>
-                            Menu
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-
-                        <li class="nav-item"> <a href="{% url 'orders-home' %}" class="nav-link {% if 'orders' in request.path %} active {% endif %} "> <i class="nav-icon bi bi-circle"></i>
-                                <p>Orders</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="{% url 'inventory-home' %}" class="nav-link {% if 'inventory' in request.path %} active {% endif %}"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Inventory</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="{% url 'customer-home' %}" class="nav-link {% if 'customer' in request.path %} active {% endif %}"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Customer</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="{% url 'product-home' %}" class="nav-link {% if 'product' in request.path %} active {% endif %} "> <i class="nav-icon bi bi-circle"></i>
-                                <p>Product</p>
-                            </a> </li>
-                    </ul>
-                </li>
-
-
-
-
-
-
-
-
-                
-            </ul> <!--end::Sidebar Menu-->
-        </nav>
-    </div> <!--end::Sidebar Wrapper-->
-</aside> <!--end::Sidebar--> <!--begin::App Main-->
+         <!--end::Sidebar Menu-->
+      </nav>
+   </div>
+   <!--end::Sidebar Wrapper-->
+</aside>
+<!--end::Sidebar--> <!--begin::App Main-->

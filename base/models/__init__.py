@@ -1,2 +1,2 @@
 from .inventory import Inventory
-from .transaction import OrderProcess
+from .transaction import ProcessedOrder

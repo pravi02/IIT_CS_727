@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect
 
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
@@ -16,11 +17,12 @@ class InventoryView(TemplateView):
     template_name = "inventory.html"
 
     def post(self, request, *args, **kwargs):
-        form = None
-        if 'form1' in self.request.POST:
-            form = InventoryForm(self.request.POST)
-        elif 'form2' in self.request.POST:
-            form = InventoryLocationForm(self.request.POST)
+        form = InventoryForm(self.request.POST)
+        inventory_id = request.POST.get('inventory_id')
+        if inventory_id:
+            inventory = get_object_or_404(Inventory, pk=inventory_id)
+            form = InventoryForm(self.request.POST, instance=inventory)
+
         if form is not None and form.is_valid():
             data = form.save()
             messages.success(request, f'Data saved at id: {data.pk}')
@@ -29,7 +31,8 @@ class InventoryView(TemplateView):
                 for error in errors:
                     messages.warning(request, f'{field}: {error}')
 
-        return super(InventoryView, self).get(request, *args, **kwargs) #self.get(request, *args, **kwargs)
+        return redirect('inventory-home')
+        # return super(InventoryView, self).get(request, *args, **kwargs) #self.get(request, *args, **kwargs)
 
 
     def get_context_data(self, **kwargs):
@@ -39,16 +42,8 @@ class InventoryView(TemplateView):
         paginator_inventory = Paginator(inventory, 10)
         inventory_page_number = self.request.GET.get('inventory_page')
         context['inventory'] = paginator_inventory.get_page(inventory_page_number)
-        # context['inventory'] = Inventory.objects.all().order_by('pk')
+        context['form'] = InventoryForm()
 
-        inventory_location = InventoryLocation.objects.all().order_by('pk')
-        paginator_inventory_location = Paginator(inventory_location, 10)
-        location_page_number = self.request.GET.get('location_page')
-        context['location'] = paginator_inventory_location.get_page(location_page_number)
-
-        # context['location'] = InventoryLocation.objects.all().order_by('pk')
-        context['form1'] = InventoryForm()
-        context['form2'] = InventoryLocationForm()
         return context
 
 
@@ -58,10 +53,6 @@ class InventoryDelete(CustomDeleteView):
     messages_name = "Inventory"
     success_url = reverse_lazy('inventory-home')
 
-class InventoryLocationDelete(CustomDeleteView):
-    model = InventoryLocation
-    messages_name = "Inventory Location"
-    success_url = reverse_lazy('inventory-home')
 
 
 

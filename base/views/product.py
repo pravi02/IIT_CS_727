@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, FormView, TemplateView
 
@@ -15,19 +16,22 @@ class ProductListView(TemplateView):
     template_name = "product.html"
 
     def post(self, request, *args, **kwargs):
-        form = None
-        if 'form1' in self.request.POST:
-            form = ProductForm(self.request.POST)
-        elif 'form2' in self.request.POST:
-            form = ProductCategoryForm(self.request.POST)
-        elif 'form3' in self.request.POST:
-            form = SupplierForm(self.request.POST)
+        form = ProductForm(self.request.POST)
+        product_id = request.POST.get('product_id')
+        if product_id:
+            product = get_object_or_404(Product, pk=product_id)
+            form = ProductForm(self.request.POST, instance=product)
 
         if form is not None and form.is_valid():
             data = form.save()
-            messages.success(request, f'data created with the ID:{data.pk}')
+            messages.success(request, f'data created/updated with the ID:{data.pk}')
+        elif form.errors:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.warning(request, f'{field}: {error}')
 
-        return super(ProductListView, self).get(request, *args, **kwargs) #self.get(request, *args, **kwargs)
+        return redirect('product-home')
+        # return super(ProductListView, self).get(request, *args, **kwargs) #self.get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,33 +41,11 @@ class ProductListView(TemplateView):
         product_page_number = self.request.GET.get('product_page')
         context['products'] = paginator_products.get_page(product_page_number)
 
-        product_category = ProductCategory.objects.all().order_by('pk')
-        paginator_category = Paginator(product_category, 10)
-        product_category_page_number = self.request.GET.get('categories_page')
-        context['categories'] = paginator_category.get_page(product_category_page_number)
-
-        suppliers = Supplier.objects.all().order_by('pk')
-        paginator_supplier = Paginator(suppliers, 10)
-        suppliers_page_number = self.request.GET.get('suppliers_page')
-        context['suppliers'] = paginator_supplier.get_page(suppliers_page_number)
-
-        context['form1'] = ProductForm()
-        context['form2'] = ProductCategoryForm()
-        context['form3'] = SupplierForm()
+        context['form'] = ProductForm()
         return context
 
 
 class ProductDelete(CustomDeleteView):
     model = Product
     messages_name = "Product"
-    success_url = reverse_lazy('product-home')
-
-class SupplierDelete(CustomDeleteView):
-    model = Supplier
-    messages_name = "Supplier"
-    success_url = reverse_lazy('product-home')
-
-class ProductCategoryDelete(CustomDeleteView):
-    model = ProductCategory
-    messages_name = "Product Category"
     success_url = reverse_lazy('product-home')

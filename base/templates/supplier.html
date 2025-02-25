@@ -1,0 +1,142 @@
+{% extends 'base_layout.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+<section class="content">
+   <div class="container-fluid">
+   <div class="row">
+      <div class="col-md">
+         <div class="card mb-4">
+            <div class="card-header">
+               <h3 class="card-title">
+                   <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#supplierModal">New Supplier</button>
+               </h3>
+               <div class="card-tools">
+                  <ul class="pagination pagination-sm float-end">
+                     {% if suppliers.has_previous %}
+                     <li class="page-item"><a class="page-link px-2" href="?suppliers_page={{ suppliers.previous_page_number }}">«</a></li>
+                     {% endif %}
+                     <li class="page-item"><a class="page-link disable"> Page {{ suppliers.number }} of {{ suppliers.paginator.num_pages }}</a></li>
+                     {% if suppliers.has_next %}
+                     <li class="page-item"><a class="page-link px-2" href="?suppliers_page={{ suppliers.next_page_number }}">»</a></li>
+                     {% endif %}
+                  </ul>
+               </div>
+            </div>
+            <div class="card-body p-0">
+               <table class="table">
+                  <thead>
+                     <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Name</th>
+                        <th>Contact #</th>
+                        <th style="width: 110px"></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for supplier in suppliers %}
+                     <tr class="align-middle">
+                        <td>{{ supplier.supplier_id }}</td>
+                        <td>{{ supplier.supplier_name }}</td>
+                        <td>{{ supplier.supplier_contact_number }}</td>
+                        <td>
+                           <ul class="list-inline m-0">
+                              <li class="list-inline-item">
+                                 <button class="btn btn-primary btn-sm rounded-0" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#supplierModal" data-supplier-id="{{ supplier.supplier_id }}"
+                                    data-supplier-name="{{ supplier.supplier_name }}"
+                                    data-supplier-contact="{{ supplier.supplier_contact_number }}">
+                                 <i class="bi bi-pencil-square"></i>
+                                 </button>
+                              </li>
+                              <li class="list-inline-item">
+                                 <a class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"  data-sup-id="{{ supplier.supplier_id }}" data-cat-name="{{ supplier.supplier_name }}" data-placement="top" title="" data-original-title="Delete">
+                                     <i class="bi bi-trash3"></i>
+                                 </a>
+                              </li>
+                           </ul>
+                        </td>
+                     </tr>
+                     {% empty %}
+                     <tr class="align-middle">
+                        <td><span>No objects yet.</span></td>
+                     </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+   </div>
+</section>
+<div class="modal fade" id="supplierModal" tabindex="-1" aria-labelledby="supplierModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <form method="post">
+            {% csrf_token %}
+            <div class="modal-header">
+               <h5 class="modal-title" id="supplierModalLabel">Create/Update Supplier</h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               <input type="hidden" id="supplier_id" name="supplier_id">
+               {{ form|crispy }}
+               <!--            <button type="submit">Submit</button>-->
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               <button type="submit" name="form3" class="btn btn-primary">Save</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+<!-- confirm_delete.html -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the Supplier <span id="supName"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" href="" class="btn btn-danger">Yes, Delete</a>
+{#                {% url 'customer-delete' cust.pk %}#}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block javascripts %}
+
+
+document.getElementById('supplierModal').addEventListener('show.bs.modal', function (event) {
+var button = event.relatedTarget; // Button that triggered the modal
+var supplierId = button.getAttribute('data-supplier-id');
+var supplierName = button.getAttribute('data-supplier-name');
+var supplierContact = button.getAttribute('data-supplier-contact');
+// Update modal fields
+document.getElementById('supplier_id').value = supplierId;
+document.getElementById('id_supplier_name').value = supplierName;
+document.getElementById('id_supplier_contact_number').value = supplierContact;
+});
+const deleteModal = document.getElementById('deleteModal');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+// Add event listener to the modal to set the customer details
+deleteModal.addEventListener('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract the supplier ID and name from data attributes
+    const supId = button.getAttribute('data-sup-id');
+    const supName = button.getAttribute('data-sup-name');
+    // Set the supplier name in the modal
+    document.getElementById('supName').textContent = supName;
+    // Set the href of the confirm delete button to the delete URL
+    confirmDeleteBtn.setAttribute('href', '{% url "product-supplier-delete" 0 %}'.replace('0', supId));
+});
+{% endblock javascripts %}

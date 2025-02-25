@@ -1,0 +1,163 @@
+
+
+{% extends 'base_layout.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+<div class="section">
+  <div class="row">
+
+
+    <!-- Location Column -->
+    <div class="col-md">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#locationModel">New Location</button>
+          </h3>
+          <div class="card-tools">
+            <ul class="pagination pagination-sm float-end">
+              {% if location.has_previous %}
+              <li class="page-item">
+                <a class="page-link px-2" href="?location_page={{ location.previous_page_number }}">«</a>
+              </li>
+              {% endif %}
+              <li class="page-item">
+                <a class="page-link disable"> Page {{ location.number }} of {{ location.paginator.num_pages }}</a>
+              </li>
+              {% if location.has_next %}
+              <li class="page-item">
+                <a class="page-link px-2" href="?location_page={{ location.next_page_number }}">»</a>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Aisle Number</th>
+                <th>Bin Location</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for loc in location %}
+              <tr class="align-middle">
+                <td>{{ loc.location_id }}</td>
+                <td>{{ loc.aisle_number }}</td>
+                <td>{{ loc.bin_location }}</td>
+                <td>
+                  <ul class="list-inline m-0">
+                    <li class="list-inline-item">
+                      <button class="btn btn-primary btn-sm rounded-0" type="button" data-bs-toggle="modal"
+                        data-bs-target="#locationModel" data-location-id="{{ loc.location_id }}"
+                        data-aisle-number="{{ loc.aisle_number }}" data-bin-location="{{ loc.bin_location }}">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </li>
+                    <li class="list-inline-item">
+                      <a class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal"
+                         data-bs-target="#deleteModal"  data-loc-id="{{ loc.location_id }}"
+                         data-loc-name="{{ loc.bin_location }}"
+                         data-placement="top" title="" data-original-title="Delete">
+                        <i class="bi bi-trash3"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+              {% empty %}
+              <tr class="align-middle">
+                <td colspan="4">No objects yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- New update Location Modal -->
+<div class="modal fade" id="locationModel" tabindex="-1" aria-labelledby="locationModelLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{% url 'inventory-location-home' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="locationModelLabel">Create/Update Location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="location_id" name="location_id"> <!-- Hidden field for location id -->
+          {{ form|crispy }} <!-- Assuming form2 is the form for creating or updating a location -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" name="form2" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- confirm_delete.html -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the Location <span id="objName"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" href="" class="btn btn-danger">Yes, Delete</a>
+{#                {% url 'customer-delete' cust.pk %}#}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+
+$('#locationModel').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var locationId = button.data('location-id');
+    var aisleNumber = button.data('aisle-number');
+    var binLocation = button.data('bin-location');
+
+    // Update modal fields
+    $('#location_id').val(locationId);
+    $('#id_aisle_number').val(aisleNumber);
+    $('#id_bin_location').val(binLocation);
+});
+
+const deleteModal = document.getElementById('deleteModal');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+// Add event listener to the modal to set the customer details
+deleteModal.addEventListener('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract the object ID and name from data attributes
+    const objId = button.getAttribute('data-loc-id');
+    const objName = button.getAttribute('data-loc-name');
+    // Set the object name in the modal
+    document.getElementById('objName').textContent = objName;
+    // Set the href of the confirm delete button to the delete URL
+    confirmDeleteBtn.setAttribute('href', '{% url "inventory-location-delete" 0 %}'.replace('0', objId));
+});
+
+{% endblock javascripts %}
+

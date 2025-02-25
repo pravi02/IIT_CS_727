@@ -1,99 +1,3 @@
-{#{% extends 'base_layout.html' %}#}
-{##}
-{#{% block content %}#}
-{##}
-{#  <div class="card mb-4">#}
-{#    <div class="card-header">#}
-{#      <h3 class="card-title">#}
-{#        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#customerModel">New Customer</button>#}
-{#      </h3>#}
-{#      <div class="card-tools">#}
-{#        <ul class="pagination pagination-sm float-end">#}
-{#          {% if customers.has_previous %}#}
-{#            <li class="page-item">#}
-{#              <a class="page-link px-2" href="?page={{ customers.previous_page_number }}">«</a>#}
-{#            </li>#}
-{#          {% endif %}#}
-{#          <li class="page-item">#}
-{#            <a class="page-link disable"> Page {{ customers.number }} of {{ customers.paginator.num_pages }}</a>#}
-{#          </li>#}
-{#          {% if customers.has_next %}#}
-{#            <li class="page-item">#}
-{#              <a class="page-link px-2" href="?page={{ customers.next_page_number }}">»</a>#}
-{#            </li>#}
-{#          {% endif %}#}
-{#        </ul>#}
-{#      </div>#}
-{#    </div>#}
-{#    <!-- /.card-header -->#}
-{#    <div class="card-body p-0">#}
-{#      <table class="table">#}
-{#        <thead>#}
-{#          <tr>#}
-{#            <th style="width: 10px">#</th>#}
-{#            <th>Name</th>#}
-{#            <th>Location</th>#}
-{#            <th>Email</th>#}
-{#            <th style="">Telephone</th>#}
-{#            <th style="width: 110px"></th>#}
-{#          </tr>#}
-{#        </thead>#}
-{#        <tbody>#}
-{#          {% for cust in customers %}#}
-{#            <tr class="align-middle">#}
-{#              <td>{{ cust.customer_id }}</td>#}
-{#              <td>{{ cust.customer_name }}</td>#}
-{#              <td>{{ cust.customer_location }}</td>#}
-{#              <td>{{ cust.customer_email }}</td>#}
-{#              <td>{{ cust.customer_telephone }}</td>#}
-{#              <td>#}
-{#                <ul class="list-inline m-0">#}
-{#                  <li class="list-inline-item">#}
-{#                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add">#}
-{#                      <i class="bi bi-pencil-square"></i>#}
-{#                    </button>#}
-{#                  </li>#}
-{#                  <li class="list-inline-item">#}
-{#                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'customer-delete' cust.pk %}" data-placement="top" title="" data-original-title="Delete">#}
-{#                      <i class="bi bi-trash3"></i>#}
-{#                    </a>#}
-{#                  </li>#}
-{#                </ul>#}
-{#              </td>#}
-{#            </tr>#}
-{#          {% empty %}#}
-{#            <tr class="align-middle">#}
-{#              <td><span>No objects yet.</span></td>#}
-{#            </tr>#}
-{#          {% endfor %}#}
-{#        </tbody>#}
-{#      </table>#}
-{#    </div>#}
-{#    <!-- /.card-body -->#}
-{#  </div>#}
-{##}
-{#  <div class="modal fade" id="customerModel" tabindex="-1" aria-labelledby="customerModelLabel" aria-hidden="true">#}
-{#    <div class="modal-dialog">#}
-{#      <div class="modal-content">#}
-{#        <form method="post">#}
-{#          {% csrf_token %}#}
-{#          <div class="modal-header">#}
-{#            <h5 class="modal-title" id="customerModelLabel">Register New Customer</h5>#}
-{#            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-{#          </div>#}
-{#          <div class="modal-body">#}
-{#            {{ form.as_p }}#}
-{#          </div>#}
-{#          <div class="modal-footer">#}
-{#            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>#}
-{#            <button type="submit" class="btn btn-primary">Save</button>#}
-{#          </div>#}
-{#        </form>#}
-{#      </div>#}
-{#    </div>#}
-{#  </div>#}
-{##}
-{#{% endblock content %}#}
 
 {% extends 'base_layout.html' %}
 
@@ -151,7 +55,7 @@
                     </button>
                   </li>
                   <li class="list-inline-item">
-                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" href="{% url 'customer-delete' cust.pk %}" data-placement="top" title="" data-original-title="Delete">
+                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"  data-cust-id="{{ cust.customer_id }}" data-cust-name="{{ cust.name }}" data-placement="top" title="" data-original-title="Delete">
                       <i class="bi bi-trash3"></i>
                     </a>
                   </li>
@@ -242,6 +146,26 @@
     </div>
   </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the customer <span id="custName"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" href="" class="btn btn-danger">Yes, Delete</a>
+{#                {% url 'customer-delete' cust.pk %}#}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 {% block javascripts %}
     $('#updateCustomerModal').on('show.bs.modal', function (event) {
@@ -259,4 +183,22 @@
   $('#updateCustomerEmail').val(customerEmail);
   $('#updateCustomerTelephone').val(customerTelephone);
 });
+
+const deleteModal = document.getElementById('deleteModal');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+// Add event listener to the modal to set the customer details
+deleteModal.addEventListener('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract the customer ID and name from data attributes
+    const custId = button.getAttribute('data-cust-id');
+    const custName = button.getAttribute('data-cust-name');
+    // Set the customer name in the modal
+    document.getElementById('custName').textContent = custName;
+    // Set the href of the confirm delete button to the delete URL
+    confirmDeleteBtn.setAttribute('href', '{% url "customer-delete" 0 %}'.replace('0', custId));
+});
+
+
 {% endblock javascripts %}
