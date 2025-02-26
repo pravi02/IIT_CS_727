@@ -1,0 +1,155 @@
+
+{% extends 'base_layout.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3 class="card-title">
+        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#UserModal">New User</button>
+      </h3>
+      <div class="card-tools">
+        <ul class="pagination pagination-sm float-end">
+          {% if users.has_previous %}
+            <li class="page-item">
+              <a class="page-link px-2" href="?page={{ users.previous_page_number }}">«</a>
+            </li>
+          {% endif %}
+          <li class="page-item">
+            <a class="page-link disable"> Page {{ users.number }} of {{ users.paginator.num_pages }}</a>
+          </li>
+          {% if users.has_next %}
+            <li class="page-item">
+              <a class="page-link px-2" href="?page={{ users.next_page_number }}">»</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body p-0">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th style="">Email</th>
+            <th style="width: 110px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usr in users %}
+            <tr class="align-middle">
+              <td>{{ usr.pk }}</td>
+              <td>{{ usr.username }}</td>
+              <td>{{ usr.first_name }}</td>
+              <td>{{ usr.last_name }}</td>
+              <td>{{ usr.email }}</td>
+              <td>
+                <ul class="list-inline m-0">
+                  <li class="list-inline-item">
+                    <button class="btn btn-primary btn-sm rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#UserModal" data-user-id="{{ usr.pk }}" data-user-name="{{ usr.username }}" data-user-first="{{ usr.first_name }}" data-user-last="{{ usr.last_name }}" data-user-email="{{ usr.email }}">
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                  </li>
+                  <li class="list-inline-item">
+                    <a class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal"  data-usr-id="{{ usr.pk }}" data-usr-name="{{ usr.username }}" data-placement="top" title="" data-original-title="Delete">
+                      <i class="bi bi-trash3"></i>
+                    </a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          {% empty %}
+            <tr class="align-middle">
+              <td><span>No objects yet.</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.card-body -->
+  </div>
+
+
+  <div class="modal fade" id="UserModal" tabindex="-1" aria-labelledby="UserModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="post" action="{% url 'user-home' %}">
+            {% csrf_token %}
+            <div class="modal-header">
+              <h5 class="modal-title" id="UserModalLabel">Create/Update User</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <input type="hidden" id="user_id" name="user_id">
+              {{ form|crispy }}
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" name="form1" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the user <span id="objName"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteBtn" href="" class="btn btn-danger">Yes, Delete</a>
+{#                {% url 'customer-delete' cust.pk %}#}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block javascripts %}
+$('#UserModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); // Button that triggered the modal
+  var userId = button.data('user-id');
+  var userName = button.data('user-name');
+  var userFirst = button.data('user-first');
+  var userLast = button.data('user-last');
+  var userEmail = button.data('user-email');
+
+  // Update modal fields
+  $('#user_id').val(userId);
+  $('#id_username').val(userName);
+  $('#id_first_name').val(userFirst);
+  $('#id_last_name').val(userLast);
+  $('#id_email').val(userEmail);
+});
+
+const deleteModal = document.getElementById('deleteModal');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+// Add event listener to the modal to set the customer details
+deleteModal.addEventListener('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    const button = event.relatedTarget;
+    // Extract the object ID and name from data attributes
+    const objId = button.getAttribute('data-usr-id');
+    const objName = button.getAttribute('data-usr-name');
+    // Set the object name in the modal
+    document.getElementById('objName').textContent = objName;
+    // Set the href of the confirm delete button to the delete URL
+    confirmDeleteBtn.setAttribute('href', '{% url "user-delete" 0 %}'.replace('0', objId));
+});
+
+
+{% endblock javascripts %}

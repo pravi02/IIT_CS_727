@@ -59,12 +59,7 @@
                   </li>
                </ul>
             </li>
-            <li class="nav-item">
-               <a href="{% url 'customer-home' %}" class="nav-link {% if 'customer' in request.path %} active {% endif %}">
-                  <i class="nav-icon bi bi-circle"></i>
-                  <p>Customer</p>
-               </a>
-            </li>
+
             <li class="nav-item menu-open">
                <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-circle-fill"></i>
@@ -92,6 +87,30 @@
                         <p>Product Supplier</p>
                      </a>
                   </li>
+               </ul>
+            </li>
+            <li class="nav-item menu-open">
+               <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-circle-fill"></i>
+                  <p>
+                     People Home
+                     <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+               </a>
+               <ul class="nav nav-treeview" >
+                  <li class="nav-item">
+                    <a href="{% url 'customer-home' %}" class="nav-link {% if 'customer' in request.path %} active {% endif %}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Customer</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                     <a href="{% url 'user-home' %}" class="nav-link {% if 'user' in request.path %} active {% endif %} ">
+                        <i class="nav-icon bi bi-circle"></i>
+                        <p>User</p>
+                     </a>
+                  </li>
+
                </ul>
             </li>
          </ul>
