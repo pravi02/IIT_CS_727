@@ -20,4 +20,4 @@ class CustomerOrderForm(forms.ModelForm):
 class CustomerOrderItemsForm(forms.ModelForm):
     class Meta:
         model = CustomerOrderItems
-        exclude = ['line_item_id', 'customer_order']
+        fields = ['product', 'request_quantity',]

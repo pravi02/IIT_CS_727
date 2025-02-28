@@ -24,13 +24,13 @@
                </a>
                <ul class="nav nav-treeview">
                   <li class="nav-item">
-                     <a href="{% url 'orders-home' %}" class="nav-link {% if 'open' in request.path %} active {% endif %} ">
+                     <a href="{% url 'orders-home' %}" class="nav-link {% if 'orders' in request.path %} active {% endif %} ">
                         <i class="nav-icon bi bi-circle"></i>
                         <p>Open Orders</p>
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a href="{% url 'orders-home' %}" class="nav-link {% if 'closed' in request.path %} active {% endif %} ">
+                     <a href="{% url 'processed-home' %}" class="nav-link {% if 'processed' in request.path %} active {% endif %} ">
                         <i class="nav-icon bi bi-circle"></i>
                         <p>Closed Orders</p>
                      </a>
