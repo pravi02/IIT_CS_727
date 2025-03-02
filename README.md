@@ -24,17 +24,48 @@ to ensure smooth user experience.
 
 -   [Example Output](#example-output)
 
+
 ## Features
 
--   **Create Record**: Allows inserting new records into specified tables, ensuring the necessary constraints are met.
+- **Complex SQL Queries:**
+  
+  - **Set Operations:** Union, Intersect, Difference, Symmetric Difference.
+  - **Subqueries with CTE:** Total fines, road accidents, user violations.
+  - **Advanced Aggregate Queries:** Rollup, running totals, and averages.
+  - **OLAP Queries:** Ranking, partitioning, and percentage contribution.
 
--   **Read Record**: Retrieves and displays all records from the selected table.
+- **User-Friendly Interface**:
 
--   **Update Record**: Modifies existing records in the database using primary key(s) for identification.
+    - Intuitive navigation with dropdown menus and buttons.
+    - Interactive query execution with real-time results display.
 
--   **Delete Record**: Deletes specific records from a table based on primary key(s).
+- **CRUD Operations**:
 
--   **Error Handling**: Includes error handling for invalid options, database connection issues, and constraint violations.
+    - Create, View, Update, and Delete records in all tables
+   
+- **Error Handling**:
+      
+    - Provides meaningful error messages for invalid operations.
+    - Ensures graceful degradation and prevents application crashes.
+
+# **Technologies Used** 💻
+
+- Backend: Flask (Python)
+- Frontend: HTML, CSS, Bootstrap
+- Database: MySQL
+- Other Tools:
+  - Loom for demonstration video
+  - Git for version control
+
+# Installation 🛠️
+
+Follow these steps to set up and run the project on your local machine:
+
+## Prerequisites:
+
+- Python 3.8 or above
+- MySQL server
+
 
 ## Supported Tables
 
@@ -48,11 +79,11 @@ The application supports the following tables:
 
 3.  inventory
 
-4.  product
+   1. inventory location
 
-5.  product\_ category
-
-6.  supplier
+4.  product 
+   1. product\_ category
+   2. supplier
 
 7.  order_process
 
@@ -77,7 +108,7 @@ These tables are managed using primary keys, and relationships between them are 
 
 1.  Clone or download this repository to your local machine.
 
-2.  Install the MySQL connector package if not already installed:
+2.  Install following packages if not already installed:
 ```bash
 pip install django python-dotenv crispy-bootstrap5
 ```
@@ -102,170 +133,42 @@ python manage.py runserver
 
 -   The application will display a menu with five options:
 
-    -   Create a new record
+    -   Dashboard
 
-    -   Read a record
+    -   Orders Home
 
-    -   Update a record
+    -   Inventory Home
 
-    -   Delete a record
+    -   Product Home
 
-    -   Exit
+    -   People Home
 
--   Choose an option by entering the corresponding number (1-5).
+-   Choose appropriate menu item for next action.
 
 3.  **CRUD Operations**:
 
--   Create: Select a table, then provide the required fields. The
+-   Create: Select appropriate menu item and, then click create new button and provide the required fields. The
     application checks for constraints like foreign key relationships
     before insertion.
 
--   Read: Select a table to view all its records.
+-   Read: Select appropriate menu item to read the table.
 
--   Update: Choose the table, specify the primary key(s), and update the values.
+-   Update: click the edit button next to the row to update values.
 
--   Delete: Choose the table and provide the primary key(s) to delete
-    the record.
+-   Delete: click the delete button next to the record to delete the row.
 
 4.  **Exit**:
 
--   To exit the application, select option 5. The application will close
-    the database connection.
+-   To exit the application, select sign out from the top right user account drop down menu or just close the browser
 
 ## Error Handling
 
 -   **Database Connection**: If the application fails to connect to the
     MySQL database, it displays an error message and exits gracefully.
 
--   **Invalid Menu Options**: If an invalid menu option is selected, the
-    application prompts the user to try again.
-
--   **Table and Column Selection**:
-
-    -   The application validates the user\'s choice when selecting
-        tables and columns.
-
-    -   If a non-existent or invalid option is chosen, the application
-        provides feedback and asks the user to make a valid selection.
-
 -   **Constraint Violations**: The application enforces foreign key
-    constraints. If a user tries to insert a record with a non-existent
-    ID in a referenced table, it displays an error message.
+    constraints. If a user tries to insert/delete a record in a referenced table, it displays an error message.
 
 -   **Business Logic Validation**: The application enforces business
     logic while updating or deleting records (EX: if customer order
     already processed then it will not let you update or delete)
-
-## Code Structure
-
-### DBManager Class
-
-This class is responsible for handling all database interactions and
-operations. It contains the following methods:
-
--   init: Establishes a connection to the MySQL database.
-
--   create_record: Inserts new records into the specified table.
-
--   read_record: Retrieves and displays all records from the selected
-    table.
-
--   update_record: Updates a record based on the specified primary key
-    and column.
-
--   delete_record: Deletes a record using the primary key(s) for
-    identification.
-
--   read_records_and_sub_records: Prints main records and its
-    sub-records together (useful for viewing customer order/order
-    processing)
-
--   close_connection: Closes the database connection when the
-    application exits.
-
-### main_crud_function Function
-
-This function manages the application flow:
-
--   Displays the main menu.
-
--   Takes user input for various operations.
-
--   Calls the appropriate methods from the DBManager class based on the
-    user's choice.
-
-### Example Output
-
-Here\'s a screenshot of the application running:
-
--   **Create Record** :
-
-    -   Create record python :
-
->![Inventory Management System - Example Output](screenshots/image1.png)
-
--   Create record sql :
-
-> ![Inventory Management System - Example Output](screenshots/image2.png)
-
--   **Read Record**
-
-    -   Read record python :
-
-> ![Inventory Management System - Example Output](screenshots/image3.png)
-
--   Read record sql :
-
-> ![Inventory Management System - Example Output](screenshots/image4.png)
-
--   **Update Record**
-
-    -   Update record python :
-
-> ![Inventory Management System - Example Output](screenshots/image5.png)
-
--   Update record sql :
-
-    -   Before:
-
-> ![Inventory Management System - Example Output](screenshots/image6.png)
-
--   After:
-
-> ![Inventory Management System - Example Output](screenshots/image7.png)
-
--   **Delete Record**
-
-    -   Delete record python:
-
->![Inventory Management System - Example Output](screenshots/image8.png)
-
--   Delete record sql:
-
-    -   Before:
-
->![Inventory Management System - Example Output](screenshots/image9.jpeg)
-
->![Inventory Management System - Example Output](screenshots/image10.png)
-
->![Database Manager Application - Example Output](screenshots/image11.png)
-
--   After:
-
->![Database Manager Application - Example Output](screenshots/image12.jpeg)
-
-![Database Manager Application - Example Output](screenshots/image13.png)
-
--   **Error Handling**
-
--   Case 1:
-
-![Database Manager Application - Example Output](screenshots/image14.jpeg)
-
-![Database Manager Application - Example Output](screenshots/image15.png)
-
--   Case 2:
-
-![Database Manager Application - Example Output](screenshots/image16.jpeg)
-
-![Database Manager Application - Example Output](screenshots/image17.png)
