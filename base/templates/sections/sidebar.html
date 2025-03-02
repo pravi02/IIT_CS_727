@@ -14,55 +14,61 @@
       <nav class="mt-2">
          <!--begin::Sidebar Menu-->
          <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-            <li class="nav-item menu-open">
-               <a href="#" class="nav-link active">
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == '/' %} active {% endif %}" href="{% url 'home' %}"  >
                   <i class="nav-icon bi bi-speedometer"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+            <li class="nav-item">
+               <a href="#" class="nav-link active">
+                  <i class="nav-icon bi bi-download"></i>
                   <p>
                      Orders Home
                      <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                </a>
                <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <li class="nav-item {% if 'orders' in request.path or 'processed' in request.path %} active {% endif %} ">
                      <a href="{% url 'orders-home' %}" class="nav-link {% if 'orders' in request.path %} active {% endif %} ">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-cart-plus"></i>
                         <p>Open Orders</p>
                      </a>
                   </li>
                   <li class="nav-item">
                      <a href="{% url 'processed-home' %}" class="nav-link {% if 'processed' in request.path %} active {% endif %} ">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-cart-check"></i>
                         <p>Closed Orders</p>
                      </a>
                   </li>
                </ul>
-            <li class="nav-item menu-open">
+            <li class="nav-item">
                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
+                  <i class="nav-icon bi bi-box-seam"></i>
                   <p>
                      Inventory Home
                      <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                </a>
                <ul class="nav nav-treeview">
-                  <li class="nav-item">
+                  <li class="nav-item {% if 'location' in request.path or 'inventory' in request.path %} menu-open {% endif %}">
                      <a href="{% url 'inventory-home' %}" class="nav-link {% if 'inventory' in request.path %} active {% endif %}">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-buildings"></i>
                         <p>Inventory</p>
                      </a>
                   </li>
                   <li class="nav-item">
                      <a href="{% url 'inventory-location-home' %}" class="nav-link {% if 'location' in request.path %} active {% endif %}">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-pin-map"></i>
                         <p>Inventory Location</p>
                      </a>
                   </li>
                </ul>
             </li>
 
-            <li class="nav-item menu-open">
+            <li class="nav-item">
                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
+                  <i class="nav-icon bi bi-gear-fill"></i>
                   <p>
                      Product Home
                      <i class="nav-arrow bi bi-chevron-right"></i>
@@ -71,27 +77,27 @@
                <ul class="nav nav-treeview" >
                   <li class="nav-item">
                      <a href="{% url 'product-home' %}" class="nav-link {% if 'product' in request.path %} active {% endif %} ">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-smartwatch"></i>
                         <p>Product</p>
                      </a>
                   </li>
                   <li class="nav-item">
                      <a href="{% url 'product-category-home' %}" class="nav-link {% if 'product_category' in request.path %} active {% endif %} ">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-collection"></i>
                         <p>Product Category</p>
                      </a>
                   </li>
                   <li class="nav-item">
                      <a href="{% url 'product-supplier-home' %}" class="nav-link {% if 'product_supplier' in request.path %} active {% endif %} ">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-person-down"></i>
                         <p>Product Supplier</p>
                      </a>
                   </li>
                </ul>
             </li>
-            <li class="nav-item menu-open">
+            <li class="nav-item">
                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
+                  <i class="nav-icon bi bi-people-fill"></i>
                   <p>
                      People Home
                      <i class="nav-arrow bi bi-chevron-right"></i>
@@ -100,13 +106,13 @@
                <ul class="nav nav-treeview" >
                   <li class="nav-item">
                     <a href="{% url 'customer-home' %}" class="nav-link {% if 'customer' in request.path %} active {% endif %}">
-                      <i class="nav-icon bi bi-circle"></i>
+                      <i class="nav-icon bi bi-person-vcard"></i>
                       <p>Customer</p>
                     </a>
                   </li>
                   <li class="nav-item">
                      <a href="{% url 'user-home' %}" class="nav-link {% if 'user' in request.path %} active {% endif %} ">
-                        <i class="nav-icon bi bi-circle"></i>
+                        <i class="nav-icon bi bi-person-bounding-box"></i>
                         <p>User</p>
                      </a>
                   </li>

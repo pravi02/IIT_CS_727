@@ -40,7 +40,7 @@ class Product(models.Model):
         unique_together = ["product_name", "product_category"]
 
     def __str__(self):
-        return self.product_name
+        return f"{self.product_name}"
 
 
 

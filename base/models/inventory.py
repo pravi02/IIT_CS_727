@@ -28,7 +28,7 @@ class Inventory(models.Model):
         unique_together = ["product", "inventory_location"]
 
     def __str__(self):
-        return self.product
+        return f"{self.product.product_name} - Location: {self.inventory_location.bin_location} - Qty Available: {self.available_quantity}"
 
     @classmethod
     def get_all(cls):

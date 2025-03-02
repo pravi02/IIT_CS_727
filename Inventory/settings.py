@@ -169,3 +169,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+LOGIN_REDIRECT_URL = '/'  # or any other URL you prefer
+
+# To specify where users will be redirected after logging out
+LOGOUT_REDIRECT_URL = '/login/'  # or any other URL you prefer

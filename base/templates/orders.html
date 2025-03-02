@@ -31,9 +31,11 @@
             {% for ord in orders %}
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-heading-{{ ord.pk }}">
+
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ ord.pk }}" aria-expanded="false" aria-controls="flush-collapse-{{ ord.pk }}">
                             Order #{{ ord.order_id }} - {{ ord.customer.customer_name }} ({{ ord.order_date }})
                         </button>
+
 
                     </h2>
                     <div id="flush-collapse-{{ ord.pk }}" class="accordion-collapse collapse" aria-labelledby="flush-heading-{{ ord.pk }}" data-bs-parent="#accordionFlushExample">
@@ -45,6 +47,7 @@
                                         <th>Product Name</th>
                                         <th>Request Qty</th>
                                         <th style="width: 200px">
+                                            {% if not ord.processedorder %}
                                             <a class="btn btn-danger btn-sm rounded-0" type="button" data-bs-toggle="modal"
                                                  data-bs-target="#deleteModal"  data-order-id="{{ ord.pk }}"
                                                  data-url="{% url 'customer-order-delete' ord.pk %}"
@@ -52,6 +55,7 @@
                                                  data-original-title="Delete">
                                                 Delete Order
                                             </a>
+                                            {% endif %}
                                         </th>
                                     </tr>
                                 </thead>
@@ -62,10 +66,16 @@
                                             <td>{{ item.product.product_name }}</td>
                                             <td>{{ item.request_quantity }}</td>
                                             <td>
+                                                {% if item.request_quantity == item.processed_items.first.allocated_quantity %}
+                                                    <div class="h6">Allocated Qty: {{ item.processed_items.first.allocated_quantity }}</div>
+                                                {% else %}
                                                 <ul class="list-inline m-0">
                                                     <!-- Process Button -->
                                                     <li class="list-inline-item">
-                                                        <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Process">
+                                                        <button type="button" class="btn btn-success btn-sm rounded-0" data-bs-toggle="modal" data-bs-target="#processItemModal"
+                                                           data-item-id="{{ item.pk }}"
+                                                           data-product-name="{{ item.product.product_name }}"
+                                                           data-request-quantity="{{ item.request_quantity }}">
                                                             <i class="bi bi-check-circle"></i>
                                                         </button>
                                                     </li>
@@ -89,6 +99,7 @@
                                                         </a>
                                                     </li>
                                                 </ul>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -116,6 +127,8 @@
                 <div class="row">
                     <form method="post">
                         {% csrf_token %}
+                        {{ formset.management_form }} <!-- Include the management form -->
+
                         <div class="modal-header">
                             <h5 class="modal-title" id="orderModelLabel">Create New Order</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -130,10 +143,11 @@
                                 <div class="col-md-2 d-flex justify-content-center align-items-center">
                                     <div class="border-start" style="height: 100%;"></div>
                                 </div>
-                                <!-- Form 2 -->
+                                <!-- Formset Form -->
                                 <div class="col-md-6" id="form2-items">
-                                    <div id="form2-container">
-                                        {{ form2|crispy }}
+                                    <!-- Only render the first form initially -->
+                                    <div class="form-row" id="form-row-0">
+                                        {{ formset.0|crispy }}
                                     </div>
                                 </div>
                             </div>
@@ -152,6 +166,58 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="processItemModal" tabindex="-1" aria-labelledby="processItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="container">
+                <div class="row">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <!-- Changed the header to "Inventory Allocation" -->
+                            <h5 class="modal-title" id="processItemModalLabel">Inventory Allocation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Display Product Info -->
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <strong>Product:</strong>
+                                    <span id="product-name">Sample Product</span> <!-- Will be dynamically updated -->
+                                </div>
+                                <div class="col-6">
+                                    <strong>Requested Quantity:</strong>
+                                    <span id="requested-quantity">10</span> <!-- Will be dynamically updated -->
+                                </div>
+                            </div>
+
+                            <hr> <!-- Separator -->
+
+                            <!-- Added new header for "Allocate from Inventory" -->
+                            <div class="row mb-3">
+                                <h5>Allocate from Inventory</h5>
+                            </div>
+
+                            <!-- Form for additional fields -->
+                            <div id="form3-custom-item-container">
+                                <input type="hidden" id="order_item_id" name="order_item_id">
+                                {{ form3|crispy }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="form3" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div class="modal fade" id="orderItemModel" tabindex="-1" aria-labelledby="orderItemModelLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -207,52 +273,93 @@
 const addFormButton = document.getElementById('add-form2-btn');
 
 if (addFormButton) {
-    let formCount = 0;  // Initialize a counter to track the number of forms
+    let formCount = 1;  // Start counting from 1 because form 0 is already rendered
 
     addFormButton.addEventListener('click', function() {
-        // Get the form2 container and the main container where forms are appended
+        // Check if the form count has reached the limit (5 forms in total)
+        if (formCount >= 5) {
+            alert("You can only add up to 5 line items.");
+            return;  // Stop further form additions
+        }
+
+        // Get the form2 container where forms are appended
         const form2MainContainer = document.getElementById('form2-items');
-        const form2Container = document.getElementById('form2-container');
 
-        // Clone the current form2 container
-        let newForm = form2Container.cloneNode(true);
+        if (form2MainContainer) {
+            // Find the first formset form container (the template for the new forms)
+            const form2Container = document.querySelector('.form-row'); // This assumes you're using the formset container as the base
 
-        // Increment the form count to ensure the next form has a unique number
-        formCount++;
+            if (form2Container) {
+                // Clone the current form container
+                let newForm = form2Container.cloneNode(true);
 
-        // Modify the cloned form to ensure each field has a unique ID and name
-        let newFormFields = newForm.querySelectorAll('input, select, textarea');
-        newFormFields.forEach(function(field) {
-            // Assign a unique id and name based on the formCount
-            field.id = field.id + '-' + formCount;
-            field.name = field.name + '-' + formCount;
-        });
+                // Update the form count
+                formCount++;
 
-        // Create a container to hold the form and delete button together
-        let formWrapper = document.createElement('div');
-        formWrapper.classList.add('form-wrapper');  // Optional: add a class for styling
+                // Modify the cloned form to ensure each field has a unique ID and name
+                let newFormFields = newForm.querySelectorAll('input, select, textarea');
+                newFormFields.forEach(function(field) {
+                    // Assign a unique id and name based on the formCount
+                    let id = field.id;
+                    let name = field.name;
 
-        // Create a delete button for the newly added form
-        let deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.classList.add('btn', 'btn-danger', 'mt-2');
-        deleteButton.innerText = 'Delete';
+                    // Update the field IDs and names
+                    if (id) {
+                        field.id = id.replace('-0', '-' + formCount);
+                    }
+                    if (name) {
+                        field.name = name.replace('-0', '-' + formCount);
+                    }
+                });
 
-        // Attach an event listener to the delete button to remove the form
-        deleteButton.addEventListener('click', function() {
-            formWrapper.remove();  // Remove the form wrapper (which includes the form and the button)
-        });
+                // Create a container to hold the form and delete button together
+                let formWrapper = document.createElement('div');
+                formWrapper.classList.add('form-wrapper');  // Optional: add a class for styling
 
-        // Append the form and the delete button to the form wrapper container
-        formWrapper.appendChild(newForm);
-        formWrapper.appendChild(deleteButton);
+                // Create a delete button for the newly added form
+                let deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.classList.add('btn', 'btn-danger', 'mt-2');
+                deleteButton.innerText = 'Delete';
 
-        // Append the form wrapper (containing form + delete button) to the main container
-        form2MainContainer.appendChild(formWrapper);
+                // Attach an event listener to the delete button to remove the form
+                deleteButton.addEventListener('click', function() {
+                    formWrapper.remove();  // Remove the form wrapper (which includes the form and the button)
+
+                    // Update the management form count
+                    updateManagementFormCount();
+                    formCount--;  // Decrement formCount after removing a form
+                });
+
+                // Append the form and the delete button to the form wrapper container
+                formWrapper.appendChild(newForm);
+                formWrapper.appendChild(deleteButton);
+
+                // Append the form wrapper (containing form + delete button) to the main container
+                form2MainContainer.appendChild(formWrapper);
+
+                // Update the management form count
+                updateManagementFormCount();
+            } else {
+                console.error('Form container not found');
+            }
+        } else {
+            console.error('Form2 main container not found');
+        }
     });
 } else {
     console.error("Add Form button not found!");
 }
+
+// Function to update the management form count
+function updateManagementFormCount() {
+    const managementForm = document.querySelector('[name="formset-TOTAL_FORMS"]');
+    if (managementForm) {
+        const totalForms = document.querySelectorAll('.form-row').length;
+        managementForm.value = totalForms; // Update the management form total count
+    }
+}
+
 
 
 const deleteModal = document.getElementById('deleteModal');
@@ -290,6 +397,24 @@ $('#orderItemModel').on('show.bs.modal', function(event) {
         }
     });
 });
+
+
+
+document.getElementById('processItemModal').addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;  // The button that triggered the modal
+
+        var itemId = button.getAttribute('data-item-id');
+        var productName = button.getAttribute('data-product-name');  // Now extracting product name
+        var requestedQuantity = button.getAttribute('data-request-quantity');
+
+        // Update modal content
+        document.getElementById('product-name').innerText = productName;  // Display product name in modal
+        document.getElementById('requested-quantity').innerText = requestedQuantity;  // Display requested quantity
+
+        // Optionally: Set the item_id in hidden field
+        document.getElementById('order_item_id').value = itemId;
+{#        document.getElementById('item_id').value = itemId;#}
+    });
 
 
 {% endblock javascripts %}

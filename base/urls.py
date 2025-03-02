@@ -1,4 +1,5 @@
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from Inventory import settings
@@ -16,8 +17,9 @@ from base.views.supplier import ProductSupplierListView, ProductSupplierDelete
 from base.views.user import UserListView, UserDelete
 
 urlpatterns = [
-    path('login/', CustomLoginView.as_view(), name='login'),
     path('', HomeView.as_view(), name="home"),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('customer', CustomerListView.as_view(), name='customer-home'),
     path('user', UserListView.as_view(), name='user-home'),
     path('orders', CustomerOrderListView.as_view(), name='orders-home'),
@@ -37,7 +39,6 @@ urlpatterns = [
     path('supplier/<int:pk>/delete', ProductSupplierDelete.as_view(), name='product-supplier-delete'),
     path('product/<int:pk>/delete', ProductDelete.as_view(), name='product-delete'),
     path('product_category/<int:pk>/delete', ProductCategoryDelete.as_view(), name='product-category-delete'),
-
 
 ]
 
