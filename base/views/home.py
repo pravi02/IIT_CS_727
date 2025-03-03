@@ -54,8 +54,6 @@ def get_orders_by_country():
 
 
 
-
-
 def get_average_order_value_by_country():
     # Aggregate orders by country and calculate total order value and average order value
     country_orders = (
