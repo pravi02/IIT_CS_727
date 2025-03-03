@@ -20,9 +20,6 @@ to ensure smooth user experience.
 
 -   [Error Handling](#error-handling)
 
--   [Code Structure](#code-structure)
-
--   [Example Output](#example-output)
 
 
 ## Features
@@ -47,6 +44,32 @@ to ensure smooth user experience.
       
     - Provides meaningful error messages for invalid operations.
     - Ensures graceful degradation and prevents application crashes.
+	
+## Supported Tables
+
+The application supports the following tables:
+
+1.  customer
+
+2.  customer_order
+
+3.  customer_order_items
+
+4.  inventory
+
+5.  inventory location
+
+6.  product
+
+7.  product_category
+
+8.  supplier
+
+9.  order_process
+
+10.  processed_line_items
+
+11.  User
 
 # **Technologies Used** 💻
 
@@ -159,7 +182,7 @@ python manage.py runserver
 
 4.  **Exit**:
 
--   To exit the application, select sign out from the top right user account drop down menu or just close the browser
+-   To exit the application, select 'Sign Out' from the user account menu at the top right or simply close the browser.
 
 ## Error Handling
 
