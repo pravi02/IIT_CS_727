@@ -73,7 +73,7 @@ The application supports the following tables:
 
 # **Technologies Used** 💻
 
-- Backend: Flask (Python)
+- Backend: Django (Python)
 - Frontend: HTML, CSS, Bootstrap
 - Database: MySQL
 - Other Tools:
