@@ -33,7 +33,7 @@
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="flush-heading-{{ ord.pk }}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ ord.pk }}" aria-expanded="false" aria-controls="flush-collapse-{{ ord.pk }}">
-                            Order #{{ ord.pk }} - {{ ord.customer_order.customer.customer_name }} ({{ ord.transaction_date }}) Total Amount:${{ ord.sales_amount }}
+                            Order #{{ ord.customer_order.pk }} - Process ID # {{ ord.pk }} - {{ ord.customer_order.customer.customer_name }} ({{ ord.transaction_date }}) Total Amount:${{ ord.sales_amount }}
                         </button>
                     </h2>
                     <div id="flush-collapse-{{ ord.pk }}" class="accordion-collapse collapse" aria-labelledby="flush-heading-{{ ord.pk }}" data-bs-parent="#accordionFlushExample">
